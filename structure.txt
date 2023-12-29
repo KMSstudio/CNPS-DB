@@ -1,0 +1,41 @@
+===== inquiry.py =====
+
+def XX_inquiry(invoice)
+송장번호를 받은 후 조회결과인 res를 반환한다.
+
+structure of XX_inquiry return:
+    'success'   Boolean                 is inquiry success
+    'msg'       string                  error message               Exist only when 'success'==False
+    'res'       list of tuple           (location, time_spent)       Exist only when 'success'==True
+
+===== location grammar =====
+location should be written like: "0T5_경기이천부발_배달출발"
+
+pre  = aTb. (Monday-Thursday:0, Friday:1, Saturday:2, Sunday: 3), (hourtime // 2)\
+     = f"{max(date.weekday()-3, 0)}T{date.hour // 2}"
+
+main = location. except '(-)' or '[-]' 
+
+post = status.
+
+Location that drop main content is called "merge location". It exist in raw-hist(not queue) but not practically used.
+
+===== make_queue.py =====
+
+make queue.json file structed like {'queue_size':N, 'queue': List}
+A queue has item that sould be tuple of 'inqueue_date'-'inquiry_result.res'
+'inqueue_date': datetime // (60 * 60 * 24)
+
+all data will be made from the queue
+if (inqueue Date is more than 365 days ago & queue size >= 100K) -> dequeue
+
+===== make_data.py =====
+
+make_raw.py
+make raw.json  file structed like 'location': time_spent_list ...
+
+make_medi.py
+make medi.json file structed like {"0T0_SM입고": {"25": 782, "50": 871, "75": 980, "95": 2278}, ...}
+
+make_hist.py
+make hist.json file structed like {"0T5_경기이천부발_배달출발": {"h1": 16, "h2": 31, "h3": 24, ... "h72": 0}, ...}
